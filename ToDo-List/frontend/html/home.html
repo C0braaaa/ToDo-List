@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo List</title>
+    <link rel="stylesheet" href="../css/home.css">
+    <link rel="icon" type="image/x-icon" href="../assets/logo2.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+</head>
+
+<body>
+    <div id="toast-container"></div>
+    <header>
+        <a class="logo" href="../html/home.html">
+            <img src="../assets/todologov2.png" alt="ToDologo">
+        </a>
+        <div class="user-dropdown">
+            <img src="../assets/user.png" alt="UserLogo">
+            <div class="user-dropdown-content">
+                <a class="signin" href="javascript:void(0)" onclick="openLoginModal()">
+                    <img src="../assets/loginlogo.png" alt=""> Sign In</a>
+                <a class="signup" href="javascript:void(0)" onclick="openSignupModal()">
+                    <img src="../assets/addUsser.png" alt=""> Sign Up</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+
+        <div class="todo-input">
+            <input type="text" id="taskInput" placeholder="Enter a new task">
+            <button onclick="addTask()">Add Task</button>
+        </div>
+        <ul id="todoList"></ul>
+    </main>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="container">
+            <div class="container-left">
+                <div class="bg"></div>
+                <div class="logo">
+                    <img src="../assets/todologov2.png" alt="">
+                </div>
+            </div>
+            <div class="container-right">
+                <div class="login-form">
+                    <span class="close-btn" onclick="closeLoginModal()">&times;</span>
+                    <h2>Đăng nhập</h2>
+                    <p class="subtitle">Nếu bạn chưa có tài khoản, <a href="javascript:void(0)"
+                            onclick="switchToSignup()">đăng ký ngay</a></p>
+                    <form onsubmit="loginUser(event)">
+                        <div id="login-error" class="error-message"></div>
+                        <div class="form-group">
+                            <input type="email" id="login-email" placeholder="Email" required>
+                        </div>
+                        <div class="form-group">
+                            <div class="password-wrapper">
+                                <input type="password" id="login-password" placeholder="Mật khẩu" required>
+                                <img src="../assets/closeEys.png" class="toggle-password"
+                                    onclick="togglePassword(this)">
+                            </div>
+                        </div>
+                        <button type="submit" class="login-btn">Đăng nhập</button>
+                    </form>
+                    <div class="forgot-password">
+                        <a href="#">Quên mật khẩu?</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Signup Modal -->
+    <div id="signupModal" class="modal">
+        <div class="container">
+            <div class="container-left">
+                <div class="bg"></div>
+                <div class="logo">
+                    <img src="../assets/todologov2.png" alt="">
+                </div>
+            </div>
+            <div class="container-right">
+                <div class="login-form">
+                    <span class="close-btn" onclick="closeSignupModal()">&times;</span>
+                    <h2>Đăng ký</h2>
+                    <p class="subtitle">Đã có tài khoản? <a href="javascript:void(0)" onclick="switchToLogin()">đăng
+                            nhập ngay</a>
+                    </p>
+                    <form onsubmit="registerUser(event)">
+                        <div id="signup-error" class="error-message"></div>
+                        <div class="form-group">
+                            <input type="text" id="username" placeholder="Tên đăng nhập" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="email" id="signup-email" placeholder="Email" required>
+                        </div>
+                        <div class="form-group">
+                            <div class="password-wrapper">
+                                <input type="password" id="signup-password" placeholder="Mật khẩu" required>
+                                <img src="../assets/closeEys.png" class="toggle-password"
+                                    onclick="togglePassword(this)">
+                            </div>
+
+                        </div>
+                        <div class="form-group">
+                            <div class="password-wrapper">
+                                <input type="password" id="confirm-password" placeholder="Xác nhận mật khẩu" required>
+                                <img src="../assets/closeEys.png" class="toggle-password"
+                                    onclick="togglePassword(this)">
+                            </div>
+
+                        </div>
+                        <button type="submit" class="login-btn">Đăng ký</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Change password Modal -->
+    <div id="changePassModal" class="modal">
+        <div class="container">
+            <div class="container-left">
+                <div class="bg"></div>
+                <div class="logo">
+                    <img src="../assets/todologov2.png" alt="">
+                </div>
+            </div>
+            <div class="container-right">
+                <div class="login-form">
+                    <span class="close-btn" onclick="closeChangepassModal()">&times;</span>
+                    <h2>Đổi mật khẩu</h2>
+                    <form id="changePasswordForm">
+                        <div id="changepass-error" class="error-message"></div>
+                        <div class="form-group">
+                            <div class="password-wrapper">
+                                <input type="password" id="current-password" placeholder="Mật khẩu hiện tại" required>
+                                <img src="../assets/closeEys.png" class="toggle-password"
+                                    onclick="togglePassword(this)">
+                            </div>
+
+                        </div>
+                        <div class="form-group">
+                            <div class="password-wrapper">
+                                <input type="password" id="new-password" placeholder="Mật khẩu mới" required>
+                                <img src="../assets/closeEys.png" class="toggle-password"
+                                    onclick="togglePassword(this)">
+                            </div>
+
+                        </div>
+                        <div class="form-group">
+                            <div class="password-wrapper">
+                                <input type="password" id="confirm-new-password" placeholder="Xác nhận mật khẩu mới"
+                                    required>
+                                <img src="../assets/closeEys.png" class="toggle-password"
+                                    onclick="togglePassword(this)">
+                            </div>
+
+                        </div>
+                        <button type="submit" class="login-btn">Đổi mật khẩu</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Task Modal -->
+    <div id="editModal" class="modal">
+        <div class="container-edit">
+            <span class="close-btn-edit" onclick="closeEditModal()">&times;</span>
+            <h1 class="Title">Edit Tasks</h1>
+            <form id="editTaskForm">
+                <label for="editNameTask">Change Task Name</label><br>
+                <input type="text" id="editNameTask" class="editNameTask" placeholder="Change Task Name" required><br>
+                <label for="startDate">Start Date</label><br>
+                <input type="date" id="startDate" class="startDate" placeholder="Start Date" required><br>
+                <label for="endDate">End Date</label><br>
+                <input type="date" id="endDate" class="endDate" placeholder="End Date" required><br>
+                <label for="description">Description</label><br>
+                <textarea id="description" class="description" placeholder="Description" required></textarea><br>
+                <div class="edit-buttons">
+                    <button type="submit" class="save-btn">Save</button>
+                    <button type="button" class="cancel-btn">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- View Task Modal -->
+    <div id="viewModal" class="modal">
+        <div class="container-view">
+            <span class="close-btn-view" onclick="closeViewModal()">&times;</span>
+            <h1 class="Title">Task Details</h1>
+            <div class="view-content">
+                <p><strong>Task Name:</strong> <span id="viewTaskName"></span></p>
+                <p><strong>Start Date:</strong> <span id="viewStartDate"></span></p>
+                <p><strong>End Date:</strong> <span id="viewEndDate"></span></p>
+                <p><strong>Description:</strong> <span id="viewDescription"></span></p>
+            </div>
+            <div class="edit-buttons">
+                <button class="cancel-btn" type="button" onclick="closeViewModal()">Close</button>
+            </div>
+        </div>
+    </div>
+    <footer class="main-footer">
+        <div class="footer-container">
+            <div class="footer-col">
+                <h3>TODO LIST</h3>
+                <p>© 2025 C Studio</p>
+            </div>
+            <div class="footer-col">
+                <h4>Users</h4>
+                <ul>
+                    <li>Feedback</li>
+                    <li>Supplier</li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Company</h4>
+                <ul>
+                    <li>About us</li>
+                    <li>Careers</li>
+                    <li>Contact us</li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Further Information</h4>
+                <ul>
+                    <li>Terms &amp; Conditions</li>
+                    <li>Privacy Policy</li>
+                </ul>
+            </div>
+            <div class="footer-col social">
+                <h4>Follow us</h4>
+                <div class="footer-social">
+                    <a href="#"><i class="fa-brands fa-square-facebook"></i></a>
+                    <a href="#"><i class="fa-brands fa-facebook-messenger"></i></a>
+                    <a href="#"><i class="fa-brands fa-square-x-twitter"></i></a>
+                    <a href="#"><i class="fa-brands fa-youtube"></i></a>
+                    <a href="#"><i class="fa-brands fa-square-github"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <div id="deleteDialog" class="modal">
+        <div class="dialog-content">
+            <h2>Are you sure?</h2>
+            <p>Delete this task!</p>
+            <div class="dialog-buttons">
+                <button class="delete-btn" onclick="confirmDelete()">Delete</button>
+                <button class="cancel-btn" onclick="closeDeleteDialog()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/utils/toast.js"></script>
+    <script src="../js/action/action.js"></script>
+    <script src="../js/auth/auth.js"></script>
+</body>
+
+</html>

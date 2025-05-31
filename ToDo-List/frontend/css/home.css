@@ -1,0 +1,865 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: #f0f2f5;
+}
+/* Toast Notification */
+#toast-container {
+    position: fixed;
+    bottom: 20px;          /* Distance from top */
+    right: 20px;        /* Distance from right */
+    z-index: 10000;     /* Ensure it's above everything */
+}
+
+.toast {
+    position: relative;
+    padding: 16px 24px;
+    margin-bottom: 10px;
+    background: #fff;
+    border-radius: 4px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 300px;
+    max-width: 400px;
+    transform-origin: top right;
+    animation: toast-in-right 0.7s;
+    transition: opacity 0.5s ease;
+}
+
+.toast.success {
+    border-left: 4px solid #4CAF50;
+}
+
+.toast.error {
+    border-left: 4px solid #f44336;
+}
+
+@keyframes toast-in-right {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+/* Show password */
+.password-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.password-wrapper input {
+    width: 100%;
+    padding-right: 40px; /* chừa chỗ cho icon */
+}
+
+.toggle-password {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    width: 24px;
+    height: 24px;
+    opacity: 0.6;
+    transition: opacity 0.2s ease;
+}
+
+.toggle-password:hover {
+    opacity: 1;
+}
+
+/* Header Styles */
+header {
+    background-color: #FFA827;
+    color: white;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 80px; /* Fixed header height */
+    display: fixed;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    height: 100%; /* Takes full height of header */
+}
+
+.logo img {
+    height: 150px; /* Slightly smaller than header height */
+    width: auto; /* Maintain aspect ratio */
+    transition: transform 0.2s ease;
+}
+
+.user-dropdown {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.user-dropdown img {
+    width: 35px;
+    height: 35px;
+    transition: transform 0.2s ease;
+}
+
+.user-dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: white;
+    min-width: 160px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    z-index: 1;
+    overflow: hidden;
+}
+
+.user-welcome {
+    cursor: pointer;
+    font-weight: bold;
+    color: #333;
+    padding: 5px 10px;
+    font-size: 20px;
+}
+
+.user-dropdown:hover .user-dropdown-content {
+    display: block;
+}
+
+.change-pass img, .logout img {
+    width: 20px;
+    height: 20px;
+    margin-right: 8px;
+}
+
+.change-pass, .logout {
+    color: #333;
+    padding: 8px 15px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+}
+
+.change-pass:hover, .logout:hover {
+    background-color: #f0f0f0;
+}
+
+.signin img, .signup img {
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+    margin-right: 8px;
+}
+
+.user-dropdown-content a {
+    color: #333;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: background-color 0.2s ease;
+    font-weight: bold;
+}
+
+.user-dropdown-content a img {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+}
+
+.user-dropdown-content a:hover {
+    background-color: #f5f5f5;
+    color: #FFA827;
+}
+
+/* Main Styles */
+main {
+    flex: 1;
+    padding: 2rem;
+    max-width: 800px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.todo-input {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+#taskInput {
+    flex: 1;
+    padding: 1rem;
+    font-size: 1.1rem;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    transition: border-color 0.2s ease;
+}
+
+#taskInput:focus {
+    outline: none;
+    border-color: #FFA827;
+    box-shadow: 0 0 0 2px rgba(255, 168, 39, 0.1);
+}
+
+button {
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: #FFA827;
+    color: white;
+}
+
+button:hover {
+    background-color: #F27F00;
+}
+
+#todoList {
+    list-style: none;
+}
+
+.todo-item {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    background-color: white;
+    margin-bottom: 0.8rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
+}
+
+.todo-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.todo-item.completed {
+    background-color: #e8f5e9;  /* Light green background */
+    border-left: 4px solid #4CAF50;  /* Green accent border */
+}
+
+.todo-item.completed span {
+    text-decoration: line-through;
+    color: #888;
+}
+
+.todo-item.completed:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(76, 175, 80, 0.2);  /* Green tinted shadow */
+}
+
+.todo-item input[type="checkbox"] {
+    margin-right: 1rem;
+}
+
+.todo-item span {
+    flex: 1;
+    margin: 0 1rem;
+    font-weight: bold;
+    font-size: 18px;
+    color: #FFA827;
+}
+
+.todo-item button {
+    padding: 8px 16px;
+    margin-left: 8px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.3s ease;
+}
+
+.todo-item .finish-btn {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.todo-item .edit-btn {
+    background-color: #1976d2;
+    color: white;
+}
+
+.todo-item .view-btn {
+    background-color: #FFA827;
+    color: white;
+}
+
+.todo-item .delete-btn {
+    background-color: #f44336;
+    color: white;
+}
+
+.todo-item button:hover {
+    opacity: 0.9;
+}
+
+.todo-item.completed .finish-btn {
+    background-color: #888;
+}
+
+/* Modal for View Task */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal .container {
+    position: relative;
+    width: 860px;
+    height: 520px;
+    background-color: rgb(255, 255, 255);
+    border-radius: 20px;
+    display: flex;
+    overflow: hidden;
+}
+
+@keyframes modalFade {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.close-btn {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    font-size: 24px;
+    color: #666;
+    cursor: pointer;
+    z-index: 1001;
+}
+    
+/* Modal Login Styles */
+.modal .container-left {
+    width: 50%;
+    height: 100%;
+    background-color: #FFA827;
+    border-radius: 20px 0 0 20px;
+    display: flex;
+    position: relative;
+}
+
+.modal .container-left .logo img {
+    width: 300px;
+    height: 300px;
+    position: absolute;
+    bottom: -50px;
+    right: 75px;
+}
+
+.modal .container-right {
+    width: 50%;
+    height: 100%;
+    background-color: #FDF5ED;
+    border-radius: 0 20px 20px 0;
+    padding: 40px;
+    display: flex;
+    align-items: center;
+}
+
+.modal .login-form {
+    width: 100%;
+    max-width: 320px;
+    margin: 0 auto;
+}
+
+.modal .login-form h2 {
+    color: #333;
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.modal .subtitle {
+    color: #666;
+    margin-bottom: 30px;
+}
+
+.modal .subtitle a {
+    color: #FFA827;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.modal .form-group {
+    margin-bottom: 20px;
+}
+
+.modal .form-group input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: border-color 0.3s ease;
+}
+
+.modal .form-group input:focus {
+    outline: none;
+    border-color: #FFA827;
+    box-shadow: 0 0 0 2px rgba(255, 168, 39, 0.1);
+}
+
+.modal .login-btn {
+    width: 100%;
+    padding: 12px;
+    background-color: #FFA827;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.modal .login-btn:hover {
+    background-color: #F27F00;
+}
+
+.modal .forgot-password {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.modal .forgot-password a {
+    color: #666;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.modal .forgot-password a:hover {
+    color: #FFA827;
+}
+/* Edit Modal */
+.container-edit {
+    width: 500px;
+    padding: 2rem;
+    background-color: #fdf5ed;
+    border-radius: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+.close-btn-edit {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 24px;
+    color: #666;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+}
+
+.Title {
+    color: #FFA827;
+    font-size: 24px;
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.container-edit label,.container-edit label[for="description"] {
+    color: #666;
+    margin-bottom: 0.5rem;
+    font-size: 14px;
+    font-weight: bold;
+    color: #FFA827;
+    padding-bottom: 10px;
+}
+
+.container-edit input,
+.container-edit textarea {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.container-edit input:focus,
+.container-edit textarea:focus {
+    outline: none;
+    border-color: #FFA827;
+    box-shadow: 0 0 0 2px rgba(255, 168, 39, 0.1);
+}
+
+.container-edit textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.container-edit input[type="date"] {
+    color: #666;
+    cursor: pointer;
+}
+
+/* Add buttons for save and cancel */
+.edit-buttons {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.edit-buttons button {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.save-btn {
+    background-color: #FFA827;
+    color: white;
+}
+
+.save-btn:hover {
+    background-color: #F27F00;
+}
+
+.cancel-btn {
+    background-color: #f2f2f2;
+    color: #666;
+}
+
+.cancel-btn:hover {
+    background-color: #d5d5d5;
+}
+.error-message {
+    color: #ff3333;
+    font-size: 14px;
+    margin: 8px 0;
+    padding: 8px;
+    background-color: rgba(255, 51, 51, 0.1);
+    border-radius: 4px;
+    display: none;
+    z-index: 1;
+}
+
+.error-message.show {
+    display: block;
+}
+/* Footer Styles */
+footer {
+    background-color: #FFA827;
+    color: white;
+    text-align: center;
+    padding: 1rem;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    main {
+        padding: 1rem;
+    }
+
+    .todo-input {
+        flex-direction: column;
+    }
+
+    button {
+        width: 100%;
+    }
+
+    .todo-item {
+        flex-direction: column;
+        align-items: flex-start;
+        flex-wrap: wrap;
+    }
+
+    .todo-item button {
+        margin: 5px;
+        flex: 1;
+        min-width: calc(50% - 10px);
+    }
+}
+.dialog-content {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+}
+
+.warning-icon {
+    width: 70px;
+    margin-bottom: 20px;
+}
+
+.dialog-content h2 {
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.dialog-content p {
+    color: #666;
+    margin-bottom: 25px;
+}
+
+.dialog-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.dialog-buttons .delete-btn {
+    background: linear-gradient(to top left, red 50%, #ffffff 50%);
+    background-size: 250% 250%;
+    background-position: top left;
+    color: red;
+    border: 1px solid #dc3545;
+    padding: 10px 25px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.5s ease-out;
+    font-weight: bold;
+}
+
+.dialog-buttons .delete-btn:hover{
+    background-position: bottom right;
+    cursor: pointer;
+    color: white;
+}
+
+.dialog-buttons .cancel-btn {
+     background: linear-gradient(to bottom right, #007bff 50%, #ffffff 50%);
+    background-size: 250% 250%;
+    background-position: bottom right;
+    color: grey;
+    border: none;
+    padding: 10px 25px;
+    border-radius: 5px;
+    cursor: pointer;
+    border: 1px solid blue;
+    transition: all 0.5s ease-out;
+    font-weight: bold;
+}
+.dialog-buttons .cancel-btn:hover {
+    background-position: top left;
+    cursor: pointer;
+    color: white;
+}
+/* View Modal Styles */
+.container-view {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 500px;
+    position: relative;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.container-view .Title {
+    color: #FFA827;
+    font-size: 24px;
+    margin-bottom: 25px;
+    text-align: center;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #eee;
+}
+
+.close-btn-view {
+    position: absolute;
+    right: 20px;
+    top: 15px;
+    font-size: 24px;
+    cursor: pointer;
+    color: #666;
+    transition: color 0.3s;
+}
+
+.close-btn-view:hover {
+    color: #333;
+}
+
+.view-content {
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    max-height: 400px; /* Giới hạn chiều cao tối đa */
+    overflow-y: auto; /* Cho phép cuộn dọc khi nội dung dài */
+}
+
+.view-content p {
+    margin: 15px 0;
+    line-height: 1.6;
+    color: #FFA827;
+    font-weight: bold;
+    display: flex;
+    align-items: flex-start; /* Căn đầu dòng khi có nhiều dòng */
+    word-break: break-word; /* Ngắt từ khi quá dài */
+}
+
+.view-content strong {
+    color: #FFA827;
+    min-width: 120px;
+    display: inline-block;
+    font-weight: bold;
+    flex-shrink: 0; /* Giữ nguyên độ rộng của label */
+}
+
+.view-content span {
+    color: #666;
+    padding: 0 10px;
+    max-height: 200px; /* Giới hạn chiều cao cho phần description */
+    overflow-y: auto; /* Cho phép cuộn */
+    line-height: 1.5;
+    display: block; /* Hiển thị dạng block để có thể scroll */
+}
+
+/* Tùy chỉnh thanh cuộn */
+.view-content span::-webkit-scrollbar {
+    width: 6px;
+}
+
+.view-content span::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+}
+
+.view-content span::-webkit-scrollbar-thumb {
+    background: #FFA827;
+    border-radius: 3px;
+}
+
+.view-content span::-webkit-scrollbar-thumb:hover {
+    background: #F27F00;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .container-view {
+        width: 95%;
+        padding: 20px;
+    }
+    
+    .view-content {
+        padding: 15px;
+    }
+    
+    .view-content strong {
+        min-width: 100px;
+    }
+}
+/* Footer Styles */
+.main-footer {
+    background: #FFA827;
+    color: #000000;
+    padding: 40px 0 20px 0;
+    font-size: 15px;
+    margin-top: 40px;
+}
+
+.footer-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: flex-start;
+    max-width: 1200px;
+    margin: 0 auto;
+    gap: 30px;
+}
+
+.footer-col {
+    min-width: 140px;
+    margin-bottom: 20px;
+    text-align: left; 
+
+}
+
+.footer-col h3, .footer-col h4 {
+    color: #000000;
+    margin-bottom: 15px;
+    letter-spacing: 1px;
+    font-weight: bold;
+}
+
+.footer-col ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    text-align: left; /* Đảm bảo căn trái */
+}
+
+.footer-col ul li {
+    margin-bottom: 8px;
+    color: #000000;
+    cursor: pointer;
+}
+.footer-col ul li:hover{
+    color: #fff;
+}
+.footer-col.social .footer-social {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.footer-social a i {
+    font-size: 1.1rem;   /* Tăng kích thước icon, có thể chỉnh lớn hơn nếu muốn */
+    color: #000000;      /* Màu tím nhạt như mẫu */
+    margin-right: 8px;
+    transition: color 0.2s, transform 0.2s;
+    vertical-align: middle;
+}
+
+.footer-social a i:hover {
+    color: #fff;
+    transform: scale(1.15);
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+    .footer-container {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0;
+        padding-left: 30px;
+    }
+    .footer-col {
+        margin-bottom: 25px;
+    }
+}
+::selection{
+    background-color: #FFA827; /* Màu nền khi chọn */
+    color: black; /* Màu chữ khi chọn */
+}
